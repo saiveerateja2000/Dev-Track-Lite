@@ -4,14 +4,26 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import './index.css';
 
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/login" />;
+};
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Router>
   );
